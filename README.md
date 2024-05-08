@@ -1,5 +1,7 @@
 # partial_random_example
 
+## Introduction
+
 Ever want to inject randomness in your Python program, but unsure what random function to use? As an example, I am writing simulation software and want to randomly vary the length of the agent tasks. However, I want to pass in the random parameters so that I don't have to continually update the underlying code. 
 
 [functools.partial](https://docs.python.org/3/library/functools.html#functools.partial) and [random](https://docs.python.org/3/library/random.html) to the rescue:
@@ -19,10 +21,13 @@ In [10]: random_func()
 Out[10]: 1.1161735490673275
 ```
 
-`functools.partial` creates a wrapper around the given function with certain parameters already filled in. The result is a function that you only have to call with any remaining parameters. Since I've provided all the parameters for `random.triangular`, random_func is has no parameters, so the call is simply `random_func()`. Notice how `print(random_func)` gives a nice summary with the random method and parameters. If I decide later that I don't like the triangular distribution, I can redefine random_func:
+`functools.partial` creates a wrapper around the given function with certain parameters already filled in. The result is a function that you only have to call with any remaining parameters. Since I've provided all the parameters for `random.triangular`, random_func is has no parameters, so the call is simply `random_func()`. Notice how `print(random_func)` gives a nice summary with the random method and parameters. 
+
+If I decide later that I don't like the triangular distribution, I can redefine random_func, including the different parameters:
 
 `random_func = functools.partial(random.uniform, a=var_low, b=var_high)`
 
+### Usage in a simulation
 For example, I have an agent in the Python [Mesa](https://mesa.readthedocs.io/en/latest/tutorials/intro_tutorial.html) framework:
 
 ```
