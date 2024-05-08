@@ -97,7 +97,7 @@ if __name__ == '__main__':
         my_model.step()
 ```
 
-The results:
+### Results
 
 ```
 (.venv) PS C:\Users\me\partial_random_example> python .\rand_example.py
@@ -117,3 +117,25 @@ Step 4, Production to date: 77
 Step 5, Production to date: 97
 ```
 
+## Usage
+Download the source code:
+
+`PS C:\Users\you\PycharmProjects> git clone https://github.com/rcriii42/partial_random_example.git`
+
+Change to the partial_random_example directory and create a virtual environment (not required but recommended):
+
+`PS C:\Users\you\PycharmProjects\partial_random_example> python -m venv .\.venv`
+
+Activate the virtual environment:
+
+* In Bash (Linux, Unix, etc): `source env/bin/activate`
+* In Windows Powershell: `env\scripts\activate.ps1`
+* Commands for other command-line environments [here](https://docs.python.org/3/library/venv.html#creating-virtual-environments) (scroll down to the table)
+
+After activating the virtual environment, the command prompt will be preceded by `(.venv) `.
+
+Install the requirements:
+`(.venv) PS C:\Users\you\PycharmProjects\partial_random_example> pip install -r requirements.txt`
+
+Run the script:
+`(.venv) PS C:\Users\you\partial_random_example> python .\rand_example.py`
