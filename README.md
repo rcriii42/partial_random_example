@@ -45,5 +45,75 @@ class ProductionAgent(mesa.Agent):
         else:
             self.work_to_date += self.production * self.randfunc()
 ```
+And the model that creates and uses the agents:
 
-To change the parameters of the random function, I only need redefine random_func once at the top level and pass it into the underlying Model and Agents. Otherwise, I would have to change the Agent code to change the random function and the passed in parameters everywhere they are used.
+```
+class MyModel(mesa.Model):
+    """Example model with random functions."""
+
+    def __init__(self,
+                 num_agents=1,
+                 default_production=10,
+                 production_randomizer=None):
+        super().__init__()
+        self.num_agents = num_agents
+        self.num_steps = 0
+        # Create scheduler and assign it to the model
+        self.schedule = mesa.time.RandomActivation(self)
+
+        # Create agents
+        for i in range(self.num_agents):
+            a = ProductionAgent(i, self, default_production, production_randomizer)
+            # Add the agent to the scheduler
+            self.schedule.add(a)
+
+    def step(self):
+        """Advance the model by one step."""
+        self.num_steps += 1
+        self.schedule.step()  # This polls all the agents
+        total_production = sum(a.work_to_date for a in self.schedule.agents)
+        print(f'Step {self.num_steps}, Production to date: {total_production:0.0f}')
+```
+
+To change the parameters of the random function, I only need redefine random_func once at the top level and pass it into the underlying Model and Agents. Otherwise, I would have to update the Agent code with the random method and parameters everywhere they are used.
+
+```
+if __name__ == '__main__':
+    var_high = 1.25
+    var_low = 0.75
+    var_mode = 0.25
+    random_func = functools.partial(random.triangular, low=var_low, high=var_high, mode=var_mode)
+
+    my_model = MyModel(num_agents=1, production_randomizer=random_func)
+    for i in range(5):
+        my_model.step()
+
+    print()
+
+    random_func = functools.partial(random.uniform, a=var_low, b=var_high)
+
+    my_model = MyModel(num_agents=2, production_randomizer=random_func)
+    for i in range(5):
+        my_model.step()
+```
+
+The results:
+
+```
+(.venv) PS C:\Users\me\partial_random_example> python .\rand_example.py
+Production agent initialized with self.unique_id=0, self.randfunc=functools.partial(<bound method Random.triangular of <random.Random object at 0x000001A511BC7A10>>, low=0.75, high=1.25, mode=0.25), self.production=10
+Step 1, Production to date: 6
+Step 2, Production to date: 15
+Step 3, Production to date: 23
+Step 4, Production to date: 33
+Step 5, Production to date: 40
+
+Production agent initialized with self.unique_id=0, self.randfunc=functools.partial(<bound method Random.uniform of <random.Random object at 0x000001A511BC7A10>>, a=0.75, b=1.25), self.production=10
+Production agent initialized with self.unique_id=1, self.randfunc=functools.partial(<bound method Random.uniform of <random.Random object at 0x000001A511BC7A10>>, a=0.75, b=1.25), self.production=10
+Step 1, Production to date: 18
+Step 2, Production to date: 38
+Step 3, Production to date: 58
+Step 4, Production to date: 77
+Step 5, Production to date: 97
+```
+
