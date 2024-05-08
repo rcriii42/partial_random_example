@@ -19,7 +19,7 @@ In [10]: random_func()
 Out[10]: 1.1161735490673275
 ```
 
-`functools.partial` creates a wrapper around the given function with certain parameters already filled in. The result is a function that you only have to call with any remaining parameters. Since I've provided all the parameters for `random.triangular`, random_func is now a function with no parameters, so I call it with `random_func()`. Notice how `print(random_func)` gives a nice summary with the random method and parameters. If I decide later that I don't like the triangular distribution, I can redefine random_func:
+`functools.partial` creates a wrapper around the given function with certain parameters already filled in. The result is a function that you only have to call with any remaining parameters. Since I've provided all the parameters for `random.triangular`, random_func is has no parameters, so the call is simply `random_func()`. Notice how `print(random_func)` gives a nice summary with the random method and parameters. If I decide later that I don't like the triangular distribution, I can redefine random_func:
 
 `random_func = functools.partial(random.uniform, a=var_low, b=var_high)`
 
